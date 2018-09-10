@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Data;
+using System.Collections;
 
 namespace CompanyStructureDbAccess
 {
@@ -12,91 +13,44 @@ namespace CompanyStructureDbAccess
     {
         static void Main(string[] args)
         {
+            string ConnString = "Data Source=TAPPQA;Initial Catalog=Training-TN-CompanyStructure;Integrated Security=True";
 
-            OpenSqlConnection();
-            //Console.WriteLine(OpenSqlConnection());
-            Console.ReadKey();
+            DataTable Ergebniss = read(ConnString, "SELECT * FROM viCompany");
+           string test = (String.Format("{0} | {1}", "val0", "val1"));
+            Console.WriteLine(test);
+            Console.WriteLine("-------------------------------------------------------------------------------------------------");
+            /*read(ConnString, "SELECT * FROM viEmployee");
+            Console.WriteLine("-------------------------------------------------------------------------------------------------");
+            read(ConnString, "SELECT * FROM viDepartment");
+            Console.WriteLine("-------------------------------------------------------------------------------------------------");
+            read(ConnString, "SELECT * FROM viAddress");*/
+
+
 
 
         }
 
-        private static void OpenSqlConnection()
+        static DataTable read(string ConnString, string query)
         {
-            string connectionString = GetConnectionString();
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection())
             {
-                connection.Open();
-                Console.WriteLine("ServerVersion: {0}", connection.ServerVersion);
-                Console.WriteLine("State: {0}", connection.State);
+
+                conn.ConnectionString = ConnString;
+//                conn.Open();
+                SqlCommand viewCommand = new SqlCommand(query, conn);
+                Console.Write(viewCommand);
+
+                SqlDataAdapter adapter = new SqlDataAdapter(viewCommand);
+                
+                DataTable dt = new DataTable();
+                adapter.Fill(dt);
+                return dt;
             }
+
         }
 
-        static private string GetConnectionString()
-        {
-            // To avoid storing the connection string in your code, 
-            // you can retrieve it from a configuration file, using the 
-            // System.Configuration.ConfigurationSettings.AppSettings property 
-            return "Data Source=TAPPQA;Initial Catalog=Training-TN-CompanyStructure;"
-                + "Integrated Security=True;";
-        }
 
 
 
-
-        public static SqlDataAdapter CreateCustomerAdapter(
-                SqlConnection connection)
-            {
-                SqlDataAdapter adapter = new SqlDataAdapter();
-
-                // Create the SelectCommand.
-                SqlCommand command = new SqlCommand("SELECT * FROM Customers " +
-                    "WHERE Country = @Country AND City = @City", connection);
-
-                // Add the parameters for the SelectCommand.
-                command.Parameters.Add("@Country", SqlDbType.NVarChar, 15);
-                command.Parameters.Add("@City", SqlDbType.NVarChar, 15);
-
-                adapter.SelectCommand = command;
-
-                // Create the InsertCommand.9
-                command = new SqlCommand(
-                    "INSERT INTO Customers (CustomerID, CompanyName) " +
-                    "VALUES (@CustomerID, @CompanyName)", connection);
-
-                // Add the parameters for the InsertCommand.
-                command.Parameters.Add("@CustomerID", SqlDbType.NChar, 5, "CustomerID");
-                command.Parameters.Add("@CompanyName", SqlDbType.NVarChar, 40, "CompanyName");
-
-                adapter.InsertCommand = command;
-
-                // Create the UpdateCommand.
-                command = new SqlCommand(
-                    "UPDATE Customers SET CustomerID = @CustomerID, CompanyName = @CompanyName " +
-                    "WHERE CustomerID = @oldCustomerID", connection);
-
-                // Add the parameters for the UpdateCommand.
-                command.Parameters.Add("@CustomerID", SqlDbType.NChar, 5, "CustomerID");
-                command.Parameters.Add("@CompanyName", SqlDbType.NVarChar, 40, "CompanyName");
-                SqlParameter parameter = command.Parameters.Add(
-                    "@oldCustomerID", SqlDbType.NChar, 5, "CustomerID");
-                parameter.SourceVersion = DataRowVersion.Original;
-
-                adapter.UpdateCommand = command;
-
-                // Create the DeleteCommand.
-                command = new SqlCommand(
-                    "DELETE FROM Customers WHERE CustomerID = @CustomerID", connection);
-
-                // Add the parameters for the DeleteCommand.
-                parameter = command.Parameters.Add(
-                    "@CustomerID", SqlDbType.NChar, 5, "CustomerID");
-                parameter.SourceVersion = DataRowVersion.Original;
-
-                adapter.DeleteCommand = command;
-
-                return adapter;
-            }
-        
-            
     }
 }
