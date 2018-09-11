@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Data;
 using System.Collections;
+using System.Linq;
 
 namespace CompanyStructureDbAccess
 {
@@ -14,42 +15,129 @@ namespace CompanyStructureDbAccess
         static void Main(string[] args)
         {
             string ConnString = "Data Source=TAPPQA;Initial Catalog=Training-TN-CompanyStructure;Integrated Security=True";
+            string dividerLine = "--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------";
+            PrintData(ConnString, (ReadData(ConnString, "SELECT Id," +
+                "                                               Street, " +
+                "                                               ZipCode, " +
+                "                                               City, " +
+                "                                               CountryCode " +
+                "                                               FROM viAddress")));
+            Console.WriteLine(dividerLine);
+            PrintData(ConnString, (ReadData(ConnString, "SELECT Id," +
+                "                                               Company," +
+                "                                               Street," +
+                "                                               ZipCode," +
+                "                                               City," +
+                "                                               CountryCode" +
+                "                                               FROM viCompany")));
+            Console.WriteLine(dividerLine);
+            PrintData(ConnString, (ReadData(ConnString, "SELECT Id," +
+                "                                               Company," +
+                "                                               Department," +
+                "                                               Manager" +
+                "                                               FROM viDepartment")));
+            Console.WriteLine(dividerLine);
+            PrintData(ConnString, (ReadData(ConnString, "SELECT Id," +
+                "                                               Employee," +
+                "                                               Gender," +
+                "                                               Department," +
+                "                                               Company" +
+                "                                               FROM viEmployee")));
+            Console.WriteLine(dividerLine);
 
-            DataTable Ergebniss = read(ConnString, "SELECT * FROM viCompany");
-           string test = (String.Format("{0} | {1}", "val0", "val1"));
-            Console.WriteLine(test);
-            Console.WriteLine("-------------------------------------------------------------------------------------------------");
-            /*read(ConnString, "SELECT * FROM viEmployee");
-            Console.WriteLine("-------------------------------------------------------------------------------------------------");
-            read(ConnString, "SELECT * FROM viDepartment");
-            Console.WriteLine("-------------------------------------------------------------------------------------------------");
-            read(ConnString, "SELECT * FROM viAddress");*/
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            Console.ReadKey();
 
 
 
         }
 
-        static DataTable read(string ConnString, string query)
+
+        private static bool writeData(string ConnString, string spName, string data[], string attributes[])
         {
-            using (SqlConnection conn = new SqlConnection())
+            SqlConnection con = new SqlConnection(ConnString);
+            SqlCommand cmd = new SqlCommand(spName, con);
+            cmd.CommandType = CommandType.StoredProcedure;
+            for (int i = 0; i < data.Length; i++)
             {
+                cmd.Parameters.AddWithValue()
+            }
 
-                conn.ConnectionString = ConnString;
-//                conn.Open();
-                SqlCommand viewCommand = new SqlCommand(query, conn);
-                Console.Write(viewCommand);
+            cmd.Parameters.AddWithValue("name", TextBox1.Text);
+            cmd.Parameters.AddWithValue("email", TextBox2.Text);
+            cmd.Parameters.AddWithValue("education", TextBox3.Text);
+            cmd.Parameters.AddWithValue("phoneno", TextBox4.Text);
+            cmd.Parameters.AddWithValue("city", TextBox5.Text);
+            con.Open();
+            int k = cmd.ExecuteNonQuery();
+            if (k != 0)
+            {
+                lblmsg.Text = "Record Inserted Succesfully into the Database";
+                lblmsg.ForeColor = System.Drawing.Color.CornflowerBlue;
+            }
+            con.Close();
+            return true;
+        }
 
-                SqlDataAdapter adapter = new SqlDataAdapter(viewCommand);
-                
-                DataTable dt = new DataTable();
-                adapter.Fill(dt);
-                return dt;
+
+        private static void PrintData(string ConnString, DataTable data )
+        {
+            DataRow[] currentRows = data.Select(null, null, DataViewRowState.CurrentRows);
+
+            if (currentRows.Length < 1)
+                Console.WriteLine("No Current Rows Found");
+            else
+            {
+                foreach (DataColumn column in data.Columns)
+                    Console.Write("\t{0, -30}", column.ColumnName);
+
+                Console.WriteLine("\t");
+
+                foreach (DataRow row in currentRows)
+                {
+                    foreach (DataColumn column in data.Columns)
+                        Console.Write("\t{0, -30}", row[column]);
+
+                    Console.WriteLine("\t");
+                }
             }
 
         }
 
+        private static DataTable ReadData(string connectionString, string queryString)
+        {
+            
+            SqlConnection connection = new SqlConnection(connectionString);
 
+            SqlCommand command = new SqlCommand();
+            command.Connection = connection;
+            command.CommandText = queryString;
+
+            DataTable data = new DataTable();
+
+
+            SqlDataAdapter adapter = new SqlDataAdapter(command);
+            adapter.Fill(data);
+            return data;
+            
+        }
+
+        
+    
 
 
     }
