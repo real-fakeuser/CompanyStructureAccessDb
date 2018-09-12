@@ -14,6 +14,10 @@ namespace CompanyStructureDbAccess
     {
         static void Main(string[] args)
         {
+            Controller controller = new Controller();
+            Controller.run();
+
+            /*
             //string ConnString = "Data Source=TAPPQA;Initial Catalog=Training-TN-CompanyStructure;Integrated Security=True";
             string ConnString = Properties.Settings.Default.SqlConnString;
             string dividerLine = "--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------";
@@ -141,9 +145,9 @@ namespace CompanyStructureDbAccess
             SqlDataAdapter adapter = new SqlDataAdapter(command);
             adapter.Fill(data);
             return data;
-            
+            */
         }
-
+        
         
     
 
