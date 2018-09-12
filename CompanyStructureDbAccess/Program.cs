@@ -44,20 +44,14 @@ namespace CompanyStructureDbAccess
                 "                                               Company" +
                 "                                               FROM viEmployee")));
 
-            Console.WriteLine("sp1");
-            Console.WriteLine("sp2");
-            Console.WriteLine("sp3");
+            
             Console.Write("To edit or update a dataset via a sp enter sp-Name and then press enter: ");
             string spName = (Console.ReadLine());
-            Console.WriteLine("Now enter the attributes one by one devided by a space: ");
-            
+            Console.WriteLine("Now enter the attributes one by one divided by a space: ");
             string sinput = Console.ReadLine();
             string[] stringSeparators = new string[] { " " };
-
-
             ArrayList attributes = new ArrayList();
             ArrayList attributeData = new ArrayList();
-
             attributes.AddRange(sinput.Split(stringSeparators, StringSplitOptions.None));
             attributeData.Clear();
             for (int i = 0; i < attributes.Count; i++)
