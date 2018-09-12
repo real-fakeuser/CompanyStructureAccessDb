@@ -13,6 +13,7 @@ namespace CompanyStructureDbAccess.Model
 {
     public class Company
     {
-        public DataTable dtCompanies { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }

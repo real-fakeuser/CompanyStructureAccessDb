@@ -7,61 +7,32 @@ using System.Data.SqlClient;
 using System.Data;
 using System.Collections;
 using System.Linq;
+using Dapper;
+using CompanyStructureDbAccess.Model;
 
 namespace CompanyStructureDbAccess.Repository
 {
 
-public class CompanyRepo
+    public class CompanyRepo
     {
-        
-        public static int create()
+
+        public List<Model.Company> Read(SqlConnection conn)
         {
-
-
-
-            return Convert.ToInt32(false);
+            string sqlStatement = @"SELECT Id,
+                                            Company AS Name
+                                    FROM viCompany;";
+            var result = conn.Query<Company>(sqlStatement).ToList();
+            return result;
         }
 
-        public static int update()
+        public bool CreateOrUpdate(SqlConnection conn, string Name)
         {
-
-
-
-            return Convert.ToInt32(false);
+            string query = "spCreateOrUpdateCompany";
+            var param = new DynamicParameters();
+            param.Add("@Name", Name);
+            var result = conn.Execute(query, param, null, null, CommandType.StoredProcedure);
+            return result > 0;
         }
-
-        public static int delete()
-        {
-
-
-
-            return Convert.ToInt32(false);
-        }
-        public static int show()
-        {
-
-            string connectionString = Globals.ConnString;
-
-
-                SqlConnection connection = new SqlConnection(connectionString);
-
-                SqlCommand command = new SqlCommand();
-                command.Connection = connection;
-                command.CommandText = queryString;
-
-                DataTable data = new DataTable();
-
-
-                SqlDataAdapter adapter = new SqlDataAdapter(command);
-                adapter.Fill(data);
-//                return data;
-                
-
-
-
-            return Convert.ToInt32(false);
-        }
-
 
 
 

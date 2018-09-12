@@ -14,8 +14,8 @@ namespace CompanyStructureDbAccess
     {
         static void Main(string[] args)
         {
-            Controller controller = new Controller();
-            Controller.run();
+            MainLogic controller = new MainLogic();
+            MainLogic.run();
 
             /*
             //string ConnString = "Data Source=TAPPQA;Initial Catalog=Training-TN-CompanyStructure;Integrated Security=True";
