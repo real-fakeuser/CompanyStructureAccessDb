@@ -14,7 +14,12 @@ namespace CompanyStructureDbAccess
     {
         static void Main(string[] args)
         {
-            string ConnString = "Data Source=TAPPQA;Initial Catalog=Training-TN-CompanyStructure;Integrated Security=True";
+            MainLogic controller = new MainLogic();
+            MainLogic.run();
+
+            /*
+            //string ConnString = "Data Source=TAPPQA;Initial Catalog=Training-TN-CompanyStructure;Integrated Security=True";
+            string ConnString = Properties.Settings.Default.SqlConnString;
             string dividerLine = "--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------";
             PrintData(ConnString, (ReadData(ConnString, "SELECT Id," +
                 "                                               Street, " +
@@ -44,20 +49,14 @@ namespace CompanyStructureDbAccess
                 "                                               Company" +
                 "                                               FROM viEmployee")));
 
-            Console.WriteLine("sp1");
-            Console.WriteLine("sp2");
-            Console.WriteLine("sp3");
+            
             Console.Write("To edit or update a dataset via a sp enter sp-Name and then press enter: ");
             string spName = (Console.ReadLine());
-            Console.WriteLine("Now enter the attributes one by one devided by a space: ");
-            
+            Console.WriteLine("Now enter the attributes one by one divided by a space: ");
             string sinput = Console.ReadLine();
             string[] stringSeparators = new string[] { " " };
-
-
             ArrayList attributes = new ArrayList();
             ArrayList attributeData = new ArrayList();
-
             attributes.AddRange(sinput.Split(stringSeparators, StringSplitOptions.None));
             attributeData.Clear();
             for (int i = 0; i < attributes.Count; i++)
@@ -146,9 +145,9 @@ namespace CompanyStructureDbAccess
             SqlDataAdapter adapter = new SqlDataAdapter(command);
             adapter.Fill(data);
             return data;
-            
+            */
         }
-
+        
         
     
 
