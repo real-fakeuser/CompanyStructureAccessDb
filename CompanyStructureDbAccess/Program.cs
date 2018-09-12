@@ -14,7 +14,8 @@ namespace CompanyStructureDbAccess
     {
         static void Main(string[] args)
         {
-            string ConnString = "Data Source=TAPPQA;Initial Catalog=Training-TN-CompanyStructure;Integrated Security=True";
+            //string ConnString = "Data Source=TAPPQA;Initial Catalog=Training-TN-CompanyStructure;Integrated Security=True";
+            string ConnString = Properties.Settings.Default.SqlConnString;
             string dividerLine = "--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------";
             PrintData(ConnString, (ReadData(ConnString, "SELECT Id," +
                 "                                               Street, " +
